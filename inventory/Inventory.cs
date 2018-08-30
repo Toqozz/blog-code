@@ -32,7 +32,7 @@ public class Inventory : ScriptableObject {
     }
 
     public static void LoadFromJSON(string path) {
-        if (!_instance) DestroyImmediate(_instance);
+        if (_instance) DestroyImmediate(_instance);
         _instance = ScriptableObject.CreateInstance<Inventory>();
         JsonUtility.FromJsonOverwrite(System.IO.File.ReadAllText(path), _instance);
         _instance.hideFlags = HideFlags.HideAndDontSave;
