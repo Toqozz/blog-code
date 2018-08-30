@@ -16,8 +16,8 @@ public class Inventory : ScriptableObject {
                     _instance = tmp[0];
                     Debug.Log("Found inventory as: " + _instance);
                 } else {
-                    Debug.Log("did not find invenotry.");
-                    _instance = null;
+                    Debug.Log("Did not find inventory, loading from file or template.");
+                    SaveManager.LoadOrInitializeInventory();
                 }
             }
 
@@ -25,11 +25,11 @@ public class Inventory : ScriptableObject {
         }
     }
 
-    public static void InitializeFromDefault(Inventory inventory) {
-		if (_instance) DestroyImmediate(_instance);
-		_instance = Instantiate(inventory);
-		_instance.hideFlags = HideFlags.HideAndDontSave;
-	}
+    public static void InitializeFromDefault() {
+        if (_instance) DestroyImmediate(_instance);
+        _instance = Instantiate((Inventory) Resources.Load("InventoryTemplate"));
+        _instance.hideFlags = HideFlags.HideAndDontSave;
+    }
 
     public static void LoadFromJSON(string path) {
         if (!_instance) DestroyImmediate(_instance);
