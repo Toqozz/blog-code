@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using UnityEngine;
 
+// See: https://github.com/azixMcAze/Unity-SerializableDictionary
+
 public abstract class SerializableDictionaryBase
 {
 	public abstract class Storage {}
