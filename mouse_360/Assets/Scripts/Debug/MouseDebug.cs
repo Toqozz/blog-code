@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MouseDebug : MonoBehaviour {
+    public float mouseDPI = 800f;
     public float sensitivityX = 15F;
     public float sensitivityY = 15F;
     public float minimumX = -360F;
@@ -52,7 +53,7 @@ public class MouseDebug : MonoBehaviour {
 		this.distanceInInchesTraveled = this.distanceInPixelsTraveled / Screen.dpi;
 		// Figure out how many physical inches the mouse has traveled.
 		//this.physicalDistanceInInchesTraveled = this.distanceInInchesTraveled / (800 / Screen.dpi);
-		this.physicalDistanceInInchesTraveled = this.distanceInPixelsTraveled / 800f;
+		this.physicalDistanceInInchesTraveled = this.distanceInPixelsTraveled / mouseDPI;
 
 		// Reset...
 		if (Input.GetKey(KeyCode.Space)) {
