@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class MouseDebug : MonoBehaviour {
     public float mouseDPI = 800f;
-    public float sensitivityX = 15F;
-    public float sensitivityY = 15F;
+    public float sensitivityX = 1F;
+    public float sensitivityY = 1F;
     public float minimumX = -360F;
     public float maximumX = 360F;
     public float minimumY = -60F;
@@ -99,11 +99,12 @@ public class MouseDebug : MonoBehaviour {
 	}
 
 	public void SetSensitivity(string sensitivity) {
+		// Source games conversion...
 		//this.sensitivityX = float.Parse(sensitivity) / 2.2727f;
 		//this.sensitivityY = float.Parse(sensitivity) / 2.2727f;
-		this.sensitivityX = 1f;
-		this.sensitivityY = 1f;
-
+		
+		this.sensitivityX = float.Parse(sensitivity);
+		this.sensitivityY = float.Parse(sensitivity);
 	}
 
     public static float ClampAngle (float angle, float min, float max) {
