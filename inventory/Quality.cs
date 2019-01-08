@@ -54,7 +54,7 @@ public static class Quality {
 	public static Quality.QualityGrade CalculateCombinedQuality(QualityGrade grade1, QualityGrade grade2) {
 		// We're overly fair to the player.
 		// normally... -> 1 + 4 = 5 / 2 = 2.5 = 2 = Brittle.
-		// we do... -> 1 + 4 + 1 = 5 /2 = 3 = 3 = Sturdy.
+		// we do... -> 1 + 4 + 1 = 6 / 2 = 3 = 3 = Sturdy.
 		return (Quality.QualityGrade)((int)((float)((int) grade1 + (int) grade2) + 1) / 2f);
 	}
 }
