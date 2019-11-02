@@ -17,7 +17,7 @@ public class ProjectileSpawner : MonoBehaviour {
             // Spawn object with random 2D rotation.
             PooledObject instance =
                 Pool.Instance.Spawn(projectile, transform.position, Quaternion.Euler(0f, 0f, Random.Range(0f, 360f)));
-            instance.As<Projectile>().speed = Random.value;
+            instance.As<Projectile>().speed = Random.Range(.5f, 1f);
         }
     }
 }
