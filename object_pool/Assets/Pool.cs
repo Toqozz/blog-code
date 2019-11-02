@@ -46,7 +46,7 @@ public class Pool : MonoBehaviour {
                 queue.Enqueue(clone);
             }
 
-            this.pool.Add(id, queue);
+            pool.Add(id, queue);
         }
     }
 
