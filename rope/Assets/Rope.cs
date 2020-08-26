@@ -292,6 +292,18 @@ using UnityEngine.Profiling;
                  node1.position += translate;
                  node2.position -= translate;
              }
+             
+             /*
+             // Distance constraint which reduces iterations, but doesn't handle stretchyness in a natural way.
+             VerletNode first = nodes[0];
+             VerletNode last = nodes[nodes.Length-1];
+             // Same distance calculation as above, but less optimal.
+             float distance = Vector2.Distance(first.position, last.position);
+             if (distance > 0 && distance > nodes.Length * nodeDistance) {
+                 Vector2 dir = (last.position - first.position).normalized;
+                 last.position = first.position + nodes.Length * nodeDistance * dir;
+             }
+             */
 
              Profiler.EndSample();
          }
