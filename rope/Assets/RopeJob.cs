@@ -6,6 +6,7 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Profiling;
+using UnityEngine.Rendering;
 
 
 // This uses 2 Unity packages:
@@ -77,8 +78,6 @@ namespace RopeJobs {
             constraints = new NativeArray<Constraint>(totalNodes, Allocator.Persistent);
             collisionInfos = new NativeArray<CollisionInfo>(MAX_ROPE_COLLISIONS, Allocator.Persistent);
             collidingNodes = new NativeArray<int>(totalNodes * MAX_ROPE_COLLISIONS, Allocator.Persistent);
-            // TODO: we probably don't need this.
-            //timeAccumulator = new NativeArray<float>(1, Allocator.Persistent);
 
             renderPositions = new Vector4[totalNodes];
             
@@ -141,13 +140,12 @@ namespace RopeJobs {
                 Time.timeScale = 1f;
             }
 
-            // Fixed timestep.  We have to calculate ahead of time to avoid transporting data to the job.
+            // Fixed timestep.  We calculate ahead of time to avoid transporting data to the job.
             timeAccum += Time.deltaTime;
             timeAccum = Mathf.Min(timeAccum, maxStep);
             int executions = (int)(timeAccum / stepTime);
             timeAccum = timeAccum % stepTime;
             
-            //timeAccumulator[0] += Time.deltaTime;
             job = new Job {
                 executions = executions,
                 iterations = iterations,
@@ -163,8 +161,6 @@ namespace RopeJobs {
 
                 stepTime = stepTime,
                 maxStep = maxStep,
-
-                //timeAccumulator = timeAccumulator,
             };
 
             jobHandle = job.Schedule();
@@ -175,7 +171,8 @@ namespace RopeJobs {
             // Wait for Job to complete.  Hopefully it's done or almost done by now.
             jobHandle.Complete();
             
-            // TODO: talk about why we want freedom of copying here.
+            // At this point, we could implement some interpolation by have 2 separate node buffers, one for the previous
+            // step and one for the latest one, and then one interpolate between them depending on frame time.
             job.nodes.CopyTo(nodes);
             job.nodes.Dispose();
             
@@ -189,14 +186,13 @@ namespace RopeJobs {
                 renderPositions[i].x = pos.x;
                 renderPositions[i].y = pos.y;
                 // z indicates how stretched this node is, with <1 being stretched, 1 being normal, and >1 having slack. 
-                // See: TODO: post link. for implementation.
+                // See: https://gist.github.com/Toqozz/52fc00f22ae02bba7c48f2062d19bec9 for example implementation.
                 renderPositions[i].z = 1;
             }
 
             material.SetVectorArray("_Points", renderPositions);
             
             // We need to manually update transform position or we might get culled after traveling a long distance.
-            // We could instea
             transform.position = (Vector2)nodes[0].position;
             if (Input.GetMouseButton(0)) {
                 SetConstraint(0, Camera.main.ScreenToWorldPoint(Input.mousePosition));
@@ -213,9 +209,10 @@ namespace RopeJobs {
             Profiler.BeginSample("Collision Snapshot");
             
             // Update the colliders in range of each node.
-            // TODO: mention using layermask.
             numCollisions = 0;
             for (int i = 0; i < nodes.Length; i++) {
+                // `OverlapCircle` has a `LayerMask` argument you can use to only detect collisions on a certain layer.
+                // This is good if you want to separate rope collision from player collision.
                 int collisions =
                     Physics2D.OverlapCircleNonAlloc(nodes[i].position, collisionRadius, colliderBuffer);
 

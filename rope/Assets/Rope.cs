@@ -77,7 +77,7 @@ using UnityEngine.Profiling;
          private float timeAccum;
          private CollisionInfo[] collisionInfos;
          private int numCollisions;
-         private bool snapshotCollision;
+         private bool shouldSnapshotCollision;
 
          private Camera cam;
          private Material material;
@@ -149,7 +149,7 @@ using UnityEngine.Profiling;
          }
 
          private void Update() {
-             if (snapshotCollision) {
+             if (shouldSnapshotCollision) {
                  SnapshotCollision();
              }
 
@@ -181,7 +181,7 @@ using UnityEngine.Profiling;
          }
 
          private void FixedUpdate() {
-             snapshotCollision = true;
+             shouldSnapshotCollision = true;
          }
 
          private void SnapshotCollision() {
@@ -250,7 +250,7 @@ using UnityEngine.Profiling;
                  }
              }
 
-             snapshotCollision = false;
+             shouldSnapshotCollision = false;
 
              Profiler.EndSample();
          }
