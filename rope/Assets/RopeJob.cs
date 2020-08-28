@@ -240,6 +240,19 @@ namespace RopeJobs {
                         ci.scale.y = math.length(ci.ltw.c1.xyz);
                         ci.position = (Vector2) col.transform.position;
                         ci.numCollisions = 1; // 1 collision, this one.
+                        /*
+                        // Workaround for tiled and sliced sprite colliders.
+                        // See blog for a slightly more optimal implementation of this.
+                        var sr = col.GetComponent<SpriteRenderer>();
+                        if (sr && sr.drawMode != SpriteDrawMode.Simple) {
+                            Vector2 size = col.GetComponent<SpriteRenderer>().size;
+                            ci.scale.x *= size.x;
+                            ci.scale.y *= size.y;
+                            ci.ltw = float4x4.TRS(col.transform.position, col.transform.rotation,
+                                math.float3(ci.scale.x, ci.scale.y, 1f));
+                            ci.wtl = math.inverse(ci.ltw);
+                        }
+                        */
                         collidingNodes[totalNodes * numCollisions] = i;
 
                         switch (col) {
