@@ -123,7 +123,9 @@ public class DrawMeshInstancedIndirectDemo : MonoBehaviour {
         int kernel = compute.FindKernel("CSMain");
 
         compute.SetVector("_PusherPosition", pusher.position);
-        compute.Dispatch(kernel, population, 1, 1);
+        // We used to just be able to use `population` here, but it looks like a Unity update imposed a thread limit (65535) on my device.
+        // This is probably for the best, but we have to do some more calculation.  Divide population by numthreads.x in the compute shader.
+        compute.Dispatch(kernel, Mathf.CeilToInt(population / 64f), 1, 1);
         Graphics.DrawMeshInstancedIndirect(mesh, 0, material, bounds, argsBuffer);
     }
 
