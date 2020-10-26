@@ -257,7 +257,7 @@ using UnityEngine.Profiling;
 
          private void Simulate() {
              for (int i = 0; i < nodes.Length; i++) {
-                 ref VerletNode node = ref nodes[i];
+                 VerletNode node = nodes[i];
 
                  Vector2 temp = node.position;
                  node.position += (node.position - node.oldPosition) + gravity * stepTime * stepTime;
