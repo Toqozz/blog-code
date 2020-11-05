@@ -160,7 +160,6 @@ namespace RopeJobs {
                 nodes = new NativeArray<VerletNode>(nodes, Allocator.TempJob),
 
                 stepTime = stepTime,
-                maxStep = maxStep,
             };
 
             jobHandle = job.Schedule();
@@ -301,7 +300,6 @@ namespace RopeJobs {
             nodes.Dispose();
             constraints.Dispose();
             collisionInfos.Dispose();
-            //timeAccumulator.Dispose();
             collidingNodes.Dispose();
         }
         

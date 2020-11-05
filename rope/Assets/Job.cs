@@ -59,23 +59,18 @@ namespace RopeJobs {
         public float friction;
 
         public float stepTime;
-        public float maxStep;
         public int numCollisions;
 
         [ReadOnly] public NativeArray<Constraint> constraints;
         [ReadOnly] public NativeArray<CollisionInfo> collisionInfos;
         [ReadOnly] public NativeArray<int> collidingNodes;
 
-        //public NativeArray<float> timeAccumulator;
         public NativeArray<VerletNode> nodes;
 
         public void Execute() {
             // Fixed step time assures that behaviour doesn't change with framerate.
             // When performance is bad, it's possible that we accrue steps infinitely, so we also implement a max step to
             // avoid this.  If we need to do this, we're probably pretty fucked anyway though (10fps~ at 0.1 max step).
-            //float acc = timeAccumulator[0];
-            //acc = math.min(acc, maxStep);
-            //while (acc >= stepTime) {
             for (int i = 0; i < executions; i++) {
                 Simulate();
 
@@ -83,11 +78,7 @@ namespace RopeJobs {
                     ApplyConstraints();
                     AdjustCollisions();
                 }
-
-                //acc -= stepTime;
             }
-
-            //timeAccumulator[0] = acc;
         }
 
         private void Simulate() {
