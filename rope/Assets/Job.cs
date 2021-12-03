@@ -197,7 +197,7 @@ namespace RopeJobs {
                             }
 
                             float dy = localPoint.y;
-                            float py = half.x - Mathf.Abs(dy);
+                            float py = half.y - Mathf.Abs(dy);
                             if (py <= 0) {
                                 continue;
                             }
