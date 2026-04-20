@@ -38,7 +38,7 @@ public static class SpringUtil {
         (p.x, v.x) = StepSpring(current.x, target.x, oldVel.x, co);
         (p.y, v.y) = StepSpring(current.y, target.y, oldVel.y, co);
         (p.z, v.z) = StepSpring(current.z, target.z, oldVel.z, co);
-        
+
         return (p, v);
     }
 
@@ -49,7 +49,7 @@ public static class SpringUtil {
         (p.y, v.y) = StepSpring(current.y, target.y, oldVel.y, co);
         (p.z, v.z) = StepSpring(current.z, target.z, oldVel.z, co);
         (p.w, v.w) = StepSpring(current.w, target.w, oldVel.w, co);
-        
+
         return (p, v);
     }
 
@@ -63,9 +63,9 @@ public static class SpringUtil {
         // Pos calculation.
         Quaternion pq1 = Quaternion.SlerpUnclamped(Quaternion.identity, fromTo, co.posPosCoef);
         Quaternion pos =  pq1 * (oldVelocity * target);
-        
+
         Quaternion newVelocity = vq1 * vq2;
-        
+
         return (pos, newVelocity);
     }
 
@@ -105,7 +105,7 @@ public static class SpringUtil {
         angularFreq = angularFreq < 0.0f ? 0.0f : angularFreq;
 
         SpringUtil.Coefficients coefficients = new SpringUtil.Coefficients();   // TODO: can we avoid garbage collection here?
-        
+
         if (angularFreq < float.Epsilon) {
             coefficients.posPosCoef = 1.0f;
             coefficients.posVelCoef = 0.0f;
@@ -202,7 +202,7 @@ public class SpringTransform : MonoBehaviour {
     public Frame m_current;
     public Frame m_target;
     public Frame m_velocity;
-    
+
     // Debug, read by `SpringTransformEditor.cs`.
     public Vector3 CurrentDir { get; set; }
     public Vector3 TargetDir { get; set; }
@@ -215,6 +215,7 @@ public class SpringTransform : MonoBehaviour {
             m_localRotation = transform.localRotation,
             m_localScale = transform.localScale
         };
+        m_current = m_target;
 
         m_coefficients = SpringUtil.CalculateCoefficients(m_timestep, m_dampingRatio, m_angularFreq);
     }
@@ -261,7 +262,7 @@ public class SpringTransform : MonoBehaviour {
         {
             CurrentDir = transform.localRotation * Vector3.forward;
             TargetDir = m_target.m_localRotation * Vector3.forward;
-            
+
             float angle;
             Vector3 axis;
             m_velocity.m_localRotation.ToAngleAxis(out angle, out axis);
@@ -283,7 +284,7 @@ public class SpringTransform : MonoBehaviour {
 
         return false;
     }
-    
+
     private bool IsRestingRot() {
         // TODO: we want to make sure we use unity convention, which probably means getting rid of the m_...
         float angleOrientation = Quaternion.Angle(transform.localRotation, m_target.m_localRotation);
@@ -338,7 +339,7 @@ public class SpringTransform : MonoBehaviour {
     public void SetTargetLocalRotation(Quaternion rot) {
         m_target.m_localRotation = rot;
     }
-    
+
     public void SetTargetLocalScale(Vector3 scale) {
         m_target.m_localScale = scale;
     }
@@ -355,7 +356,7 @@ public class SpringTransform : MonoBehaviour {
 
         SetTargetLocalPosition(val);
     }
-    
+
     public void SetTargetWorldRotation(Quaternion rot) {
         // TODO: decide if we need to handle the case where we detach from the parent
         Quaternion val;
@@ -368,7 +369,7 @@ public class SpringTransform : MonoBehaviour {
 
         SetTargetLocalRotation(val);
     }
-    
+
     public void SetTargetWorldScale(Vector3 s) {
         Vector3 val;
 
